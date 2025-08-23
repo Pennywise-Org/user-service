@@ -1,0 +1,38 @@
+# Dependency directories
+node_modules
+**/node_modules
+./node_modules
+
+# Build output
+dist
+build
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+
+# Logs
+logs
+*.log
+./logs
+
+# OS and editor files
+.DS_Store
+*.swp
+*.swo
+*.swn
+.idea
+.vscode
+
+# Git files
+.git
+.gitignore
+
+# Docker-related
+.dockerignore
+docker-compose.override.yml
+
+./package-lock.json

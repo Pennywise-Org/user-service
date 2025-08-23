@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user {
+  id                 String               @id(map: "pk_user_id") @default(uuid()) @db.Uuid
+  auth0Id            String               @unique(map: "unique id") @db.VarChar(255) @map("auth0_id")
+  email              String?              @db.VarChar(255) 
+  planId             String               @db.VarChar(64) @map("plan_id")
+  createdAt          DateTime             @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt          DateTime             @updatedAt @db.Timestamptz(6) @map("updated_at")
+  userProfile        userProfile?
+  userSetting        userSetting[]
+  userRefreshToken   userRefreshToken[]
+}
+
+model userProfile {
+  id                  String    @id(map: "pk_profile_id") @default(uuid()) @db.Uuid
+  firstName           String?   @db.VarChar(128)    @map("first_name")
+  lastName            String?   @db.VarChar(128)    @map("last_name")
+  phoneNumber         String?   @db.VarChar(15)     @map("phone_number")
+  dateOfBirth         DateTime? @db.Date @map("date_of_birth")
+  street              String?   @db.VarChar(128)
+  city                String?   @db.VarChar(128)
+  state               String?   @db.VarChar(128)
+  country             String?   @db.VarChar(128)
+  postalCode          String?   @db.VarChar(5)      @map("postal_code")
+  annualIncome        Decimal?  @db.Decimal         @map("annual_income")
+  riskTolerance       String?   @db.VarChar(10)     @map("risk_tolerance")
+  ssnEncrypted        String?   @db.VarChar(10)     @map("ssn_encrypted")
+  ssnMasked           String?   @db.VarChar(512)    @map("ssn_masked")
+  onboardingComplete  Boolean   @default(false)     @map("onboarding_complete")
+  phoneVerified       Boolean   @default(false)     @map("phone_verified")
+  plaidConnected      Boolean   @default(false)     @map("plaid_connected")
+  kycSubmitted        Boolean   @default(false)     @map("kyc_submitted")
+  userId              String    @unique(map: "unique_user_id") @db.Uuid @map("user_id")
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)   @map("created_at")
+  updatedAt           DateTime  @updatedAt @db.Timestamptz(6)        @map("updated_at")
+  user                user      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_user_profile")
+}
+
+model userSetting {
+  userId     String   @db.Uuid @map("user_id")
+  key        String   @db.VarChar(50)
+  value      Json
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6) @map("updated_at")
+
+  user       user     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_USER_SETTING")
+
+  @@id([userId, key], map: "PK_user_key")
+}
+
+model userRefreshToken {
+  id            String   @id(map: "pk_refresh_token_id") @default(uuid()) @db.Uuid
+  userId        String   @db.Uuid @map("user_id")
+  refreshToken  String   @unique(map: "unique_refresh_token") @db.VarChar(255) @map("refresh_token")
+  sessionId     String   @db.VarChar(255) @map("session_id")
+  expiresAt     DateTime @db.Timestamptz(6) @map("expires_at")
+  createdAt     DateTime @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6) @map("updated_at")
+  revoked       Boolean  @default(false) @db.Boolean
+  user          user     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_user_refresh_token")
+}

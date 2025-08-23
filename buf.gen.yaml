@@ -1,0 +1,9 @@
+version: v1
+plugins:
+  - name: ts
+    out: src/grpc
+    opt:
+      - client_grpc1 # generates gRPC client using @grpc/grpc-js
+      - server_grpc1 # generates gRPC server interface
+      - use_proto_field_name
+    path: ./node_modules/.bin/protoc-gen-ts
