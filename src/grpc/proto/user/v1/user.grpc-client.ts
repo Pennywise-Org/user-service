@@ -4,6 +4,10 @@
 import { UserService } from "./user";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { GetUserSettingsResponse } from "./user";
+import type { GetUserSettingsRequest } from "./user";
+import type { GetUserDetailsFromSessionResponse } from "./user";
+import type { GetUserDetailsFromSessionRequest } from "./user";
 import type { UpdateUserPlanResponse } from "./user";
 import type { UpdateUserPlanRequest } from "./user";
 import * as grpc from "@grpc/grpc-js";
@@ -25,6 +29,20 @@ export interface IUserServiceClient {
     updateUserPlan(input: UpdateUserPlanRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: UpdateUserPlanResponse) => void): grpc.ClientUnaryCall;
     updateUserPlan(input: UpdateUserPlanRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: UpdateUserPlanResponse) => void): grpc.ClientUnaryCall;
     updateUserPlan(input: UpdateUserPlanRequest, callback: (err: grpc.ServiceError | null, value?: UpdateUserPlanResponse) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: GetUserDetailsFromSession
+     */
+    getUserDetailsFromSession(input: GetUserDetailsFromSessionRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void): grpc.ClientUnaryCall;
+    getUserDetailsFromSession(input: GetUserDetailsFromSessionRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void): grpc.ClientUnaryCall;
+    getUserDetailsFromSession(input: GetUserDetailsFromSessionRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void): grpc.ClientUnaryCall;
+    getUserDetailsFromSession(input: GetUserDetailsFromSessionRequest, callback: (err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: GetUserSettings
+     */
+    getUserSettings(input: GetUserSettingsRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void): grpc.ClientUnaryCall;
+    getUserSettings(input: GetUserSettingsRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void): grpc.ClientUnaryCall;
+    getUserSettings(input: GetUserSettingsRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void): grpc.ClientUnaryCall;
+    getUserSettings(input: GetUserSettingsRequest, callback: (err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void): grpc.ClientUnaryCall;
 }
 /**
  * The UserService handles identity-related actions for internal service communication.
@@ -48,5 +66,19 @@ export class UserServiceClient extends grpc.Client implements IUserServiceClient
     updateUserPlan(input: UpdateUserPlanRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: UpdateUserPlanResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: UpdateUserPlanResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: UpdateUserPlanResponse) => void)): grpc.ClientUnaryCall {
         const method = UserService.methods[0];
         return this.makeUnaryRequest<UpdateUserPlanRequest, UpdateUserPlanResponse>(`/${UserService.typeName}/${method.name}`, (value: UpdateUserPlanRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): UpdateUserPlanResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: GetUserDetailsFromSession
+     */
+    getUserDetailsFromSession(input: GetUserDetailsFromSessionRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: GetUserDetailsFromSessionResponse) => void)): grpc.ClientUnaryCall {
+        const method = UserService.methods[1];
+        return this.makeUnaryRequest<GetUserDetailsFromSessionRequest, GetUserDetailsFromSessionResponse>(`/${UserService.typeName}/${method.name}`, (value: GetUserDetailsFromSessionRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GetUserDetailsFromSessionResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: GetUserSettings
+     */
+    getUserSettings(input: GetUserSettingsRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: GetUserSettingsResponse) => void)): grpc.ClientUnaryCall {
+        const method = UserService.methods[2];
+        return this.makeUnaryRequest<GetUserSettingsRequest, GetUserSettingsResponse>(`/${UserService.typeName}/${method.name}`, (value: GetUserSettingsRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GetUserSettingsResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

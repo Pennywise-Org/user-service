@@ -49,13 +49,83 @@ export interface UpdateUserPlanResponse {
     /**
      * Optional error message if the update failed.
      *
-     * @generated from protobuf field: string error_message = 2
+     * @generated from protobuf field: optional string error_message = 2
      */
-    error_message: string;
+    error_message?: string;
     /**
      * Optional error code (e.g. 404 for not found, 500 for internal error).
      *
      * @generated from protobuf field: int32 code = 3
+     */
+    code: number;
+}
+/**
+ * @generated from protobuf message proto.user.v1.GetUserDetailsFromSessionRequest
+ */
+export interface GetUserDetailsFromSessionRequest {
+    /**
+     * @generated from protobuf field: string session_id = 1
+     */
+    session_id: string;
+}
+/**
+ * @generated from protobuf message proto.user.v1.GetUserDetailsFromSessionResponse
+ */
+export interface GetUserDetailsFromSessionResponse {
+    /**
+     * @generated from protobuf field: bool success = 1
+     */
+    success: boolean;
+    /**
+     * @generated from protobuf field: optional string auth0_id = 2
+     */
+    auth0_id?: string;
+    /**
+     * @generated from protobuf field: optional string role = 3
+     */
+    role?: string;
+    /**
+     * @generated from protobuf field: repeated string permissions = 4
+     */
+    permissions: string[];
+    /**
+     * @generated from protobuf field: optional string error_message = 5
+     */
+    error_message?: string;
+    /**
+     * @generated from protobuf field: int32 code = 6
+     */
+    code: number;
+}
+/**
+ * @generated from protobuf message proto.user.v1.GetUserSettingsRequest
+ */
+export interface GetUserSettingsRequest {
+    /**
+     * @generated from protobuf field: string auth0_id = 1
+     */
+    auth0_id: string;
+}
+/**
+ * @generated from protobuf message proto.user.v1.GetUserSettingsResponse
+ */
+export interface GetUserSettingsResponse {
+    /**
+     * @generated from protobuf field: bool success = 1
+     */
+    success: boolean;
+    /**
+     * @generated from protobuf field: map<string, string> settings = 2
+     */
+    settings: {
+        [key: string]: string;
+    };
+    /**
+     * @generated from protobuf field: optional string error_message = 3
+     */
+    error_message?: string;
+    /**
+     * @generated from protobuf field: int32 code = 4
      */
     code: number;
 }
@@ -127,14 +197,13 @@ class UpdateUserPlanResponse$Type extends MessageType<UpdateUserPlanResponse> {
     constructor() {
         super("proto.user.v1.UpdateUserPlanResponse", [
             { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 2, name: "error_message", kind: "scalar", localName: "error_message", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "error_message", kind: "scalar", localName: "error_message", opt: true, T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "code", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
         ]);
     }
     create(value?: PartialMessage<UpdateUserPlanResponse>): UpdateUserPlanResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.success = false;
-        message.error_message = "";
         message.code = 0;
         if (value !== undefined)
             reflectionMergePartial<UpdateUserPlanResponse>(this, message, value);
@@ -148,7 +217,7 @@ class UpdateUserPlanResponse$Type extends MessageType<UpdateUserPlanResponse> {
                 case /* bool success */ 1:
                     message.success = reader.bool();
                     break;
-                case /* string error_message */ 2:
+                case /* optional string error_message */ 2:
                     message.error_message = reader.string();
                     break;
                 case /* int32 code */ 3:
@@ -169,8 +238,8 @@ class UpdateUserPlanResponse$Type extends MessageType<UpdateUserPlanResponse> {
         /* bool success = 1; */
         if (message.success !== false)
             writer.tag(1, WireType.Varint).bool(message.success);
-        /* string error_message = 2; */
-        if (message.error_message !== "")
+        /* optional string error_message = 2; */
+        if (message.error_message !== undefined)
             writer.tag(2, WireType.LengthDelimited).string(message.error_message);
         /* int32 code = 3; */
         if (message.code !== 0)
@@ -185,9 +254,275 @@ class UpdateUserPlanResponse$Type extends MessageType<UpdateUserPlanResponse> {
  * @generated MessageType for protobuf message proto.user.v1.UpdateUserPlanResponse
  */
 export const UpdateUserPlanResponse = new UpdateUserPlanResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetUserDetailsFromSessionRequest$Type extends MessageType<GetUserDetailsFromSessionRequest> {
+    constructor() {
+        super("proto.user.v1.GetUserDetailsFromSessionRequest", [
+            { no: 1, name: "session_id", kind: "scalar", localName: "session_id", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetUserDetailsFromSessionRequest>): GetUserDetailsFromSessionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.session_id = "";
+        if (value !== undefined)
+            reflectionMergePartial<GetUserDetailsFromSessionRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetUserDetailsFromSessionRequest): GetUserDetailsFromSessionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string session_id */ 1:
+                    message.session_id = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetUserDetailsFromSessionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string session_id = 1; */
+        if (message.session_id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.session_id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proto.user.v1.GetUserDetailsFromSessionRequest
+ */
+export const GetUserDetailsFromSessionRequest = new GetUserDetailsFromSessionRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetUserDetailsFromSessionResponse$Type extends MessageType<GetUserDetailsFromSessionResponse> {
+    constructor() {
+        super("proto.user.v1.GetUserDetailsFromSessionResponse", [
+            { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "auth0_id", kind: "scalar", localName: "auth0_id", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "role", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "permissions", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "error_message", kind: "scalar", localName: "error_message", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "code", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetUserDetailsFromSessionResponse>): GetUserDetailsFromSessionResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.success = false;
+        message.permissions = [];
+        message.code = 0;
+        if (value !== undefined)
+            reflectionMergePartial<GetUserDetailsFromSessionResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetUserDetailsFromSessionResponse): GetUserDetailsFromSessionResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool success */ 1:
+                    message.success = reader.bool();
+                    break;
+                case /* optional string auth0_id */ 2:
+                    message.auth0_id = reader.string();
+                    break;
+                case /* optional string role */ 3:
+                    message.role = reader.string();
+                    break;
+                case /* repeated string permissions */ 4:
+                    message.permissions.push(reader.string());
+                    break;
+                case /* optional string error_message */ 5:
+                    message.error_message = reader.string();
+                    break;
+                case /* int32 code */ 6:
+                    message.code = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetUserDetailsFromSessionResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool success = 1; */
+        if (message.success !== false)
+            writer.tag(1, WireType.Varint).bool(message.success);
+        /* optional string auth0_id = 2; */
+        if (message.auth0_id !== undefined)
+            writer.tag(2, WireType.LengthDelimited).string(message.auth0_id);
+        /* optional string role = 3; */
+        if (message.role !== undefined)
+            writer.tag(3, WireType.LengthDelimited).string(message.role);
+        /* repeated string permissions = 4; */
+        for (let i = 0; i < message.permissions.length; i++)
+            writer.tag(4, WireType.LengthDelimited).string(message.permissions[i]);
+        /* optional string error_message = 5; */
+        if (message.error_message !== undefined)
+            writer.tag(5, WireType.LengthDelimited).string(message.error_message);
+        /* int32 code = 6; */
+        if (message.code !== 0)
+            writer.tag(6, WireType.Varint).int32(message.code);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proto.user.v1.GetUserDetailsFromSessionResponse
+ */
+export const GetUserDetailsFromSessionResponse = new GetUserDetailsFromSessionResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetUserSettingsRequest$Type extends MessageType<GetUserSettingsRequest> {
+    constructor() {
+        super("proto.user.v1.GetUserSettingsRequest", [
+            { no: 1, name: "auth0_id", kind: "scalar", localName: "auth0_id", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetUserSettingsRequest>): GetUserSettingsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.auth0_id = "";
+        if (value !== undefined)
+            reflectionMergePartial<GetUserSettingsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetUserSettingsRequest): GetUserSettingsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string auth0_id */ 1:
+                    message.auth0_id = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetUserSettingsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string auth0_id = 1; */
+        if (message.auth0_id !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.auth0_id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proto.user.v1.GetUserSettingsRequest
+ */
+export const GetUserSettingsRequest = new GetUserSettingsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetUserSettingsResponse$Type extends MessageType<GetUserSettingsResponse> {
+    constructor() {
+        super("proto.user.v1.GetUserSettingsResponse", [
+            { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "settings", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "scalar", T: 9 /*ScalarType.STRING*/ } },
+            { no: 3, name: "error_message", kind: "scalar", localName: "error_message", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "code", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetUserSettingsResponse>): GetUserSettingsResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.success = false;
+        message.settings = {};
+        message.code = 0;
+        if (value !== undefined)
+            reflectionMergePartial<GetUserSettingsResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetUserSettingsResponse): GetUserSettingsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool success */ 1:
+                    message.success = reader.bool();
+                    break;
+                case /* map<string, string> settings */ 2:
+                    this.binaryReadMap2(message.settings, reader, options);
+                    break;
+                case /* optional string error_message */ 3:
+                    message.error_message = reader.string();
+                    break;
+                case /* int32 code */ 4:
+                    message.code = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    private binaryReadMap2(map: GetUserSettingsResponse["settings"], reader: IBinaryReader, options: BinaryReadOptions): void {
+        let len = reader.uint32(), end = reader.pos + len, key: keyof GetUserSettingsResponse["settings"] | undefined, val: GetUserSettingsResponse["settings"][any] | undefined;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case 1:
+                    key = reader.string();
+                    break;
+                case 2:
+                    val = reader.string();
+                    break;
+                default: throw new globalThis.Error("unknown map entry field for proto.user.v1.GetUserSettingsResponse.settings");
+            }
+        }
+        map[key ?? ""] = val ?? "";
+    }
+    internalBinaryWrite(message: GetUserSettingsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool success = 1; */
+        if (message.success !== false)
+            writer.tag(1, WireType.Varint).bool(message.success);
+        /* map<string, string> settings = 2; */
+        for (let k of globalThis.Object.keys(message.settings))
+            writer.tag(2, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k).tag(2, WireType.LengthDelimited).string(message.settings[k]).join();
+        /* optional string error_message = 3; */
+        if (message.error_message !== undefined)
+            writer.tag(3, WireType.LengthDelimited).string(message.error_message);
+        /* int32 code = 4; */
+        if (message.code !== 0)
+            writer.tag(4, WireType.Varint).int32(message.code);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proto.user.v1.GetUserSettingsResponse
+ */
+export const GetUserSettingsResponse = new GetUserSettingsResponse$Type();
 /**
  * @generated ServiceType for protobuf service proto.user.v1.UserService
  */
 export const UserService = new ServiceType("proto.user.v1.UserService", [
-    { name: "UpdateUserPlan", options: {}, I: UpdateUserPlanRequest, O: UpdateUserPlanResponse }
+    { name: "UpdateUserPlan", options: {}, I: UpdateUserPlanRequest, O: UpdateUserPlanResponse },
+    { name: "GetUserDetailsFromSession", options: {}, I: GetUserDetailsFromSessionRequest, O: GetUserDetailsFromSessionResponse },
+    { name: "GetUserSettings", options: {}, I: GetUserSettingsRequest, O: GetUserSettingsResponse }
 ]);

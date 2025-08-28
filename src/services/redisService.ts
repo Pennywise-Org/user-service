@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 import { getLogger } from '../config/logger';
 import { decodeAccessToken } from './tokenService';
 import { env } from '../config/env';
+import { sessionData } from '../types/userSession';
 
 const logger = getLogger('Session-Service');
 
@@ -96,7 +97,10 @@ export const saveUserSessionRedis = async (
  */
 export const getUserSessionRedis = async (
   sessionId: string
-): Promise<{ sessionData: any; active: boolean }> => {
+): Promise<{
+  sessionData: sessionData;
+  active: boolean;
+}> => {
   const key = `session:${sessionId}`;
   const activeKey = `${key}:active`;
 

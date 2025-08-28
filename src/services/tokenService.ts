@@ -53,7 +53,7 @@ export const verifyIdToken = (token: string): Promise<any> => {
  */
 export const verifyAccessToken = (token: string): Promise<any> => {
   logger.info('Attempting to verify access token');
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     jwt.verify(
       token,
       getKey,
@@ -65,7 +65,7 @@ export const verifyAccessToken = (token: string): Promise<any> => {
       (err) => {
         if (err) {
           logger.warn('Access token verification failed', { err });
-          return resolve(false);
+          return reject(err);
         }
         logger.info('Access token verified successfully');
         resolve(true);

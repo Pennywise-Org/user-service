@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import setupMiddleware from './middleware/setup';
-import { startGrpcServer } from './grpc/server';
+import { startGrpcServer } from './grpc/grpcServer';
 
 dotenv.config();
 

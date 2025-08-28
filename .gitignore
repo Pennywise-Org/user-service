@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 package-lock.json
 
 /src/generated
+
+/certs/

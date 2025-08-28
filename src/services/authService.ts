@@ -241,7 +241,7 @@ export const getManagementAPIToken = async () => {
     });
 
     // Optional: Validate the structure and claims of the token
-    await verifyAccessToken(access_token);
+    // await verifyAccessToken(access_token);
 
     // Cache the token in Redis with its expiry
     await saveManagementAPITokenRedis(access_token, expires_in);

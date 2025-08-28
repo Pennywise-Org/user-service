@@ -57,16 +57,19 @@ export const deleteUserRole = async (
   const data = JSON.stringify({ roles: [roleId] });
 
   logger.info('Deleting user role in Auth0', { auth0Id, roleId });
+  let config = {
+    method: 'delete',
+    maxBodyLength: Infinity,
+    url: url,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data: data,
+  };
 
   try {
-    const response = await axios.post(url, data, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      data: data,
-    });
-
+    const response = await axios.request(config);
     if (response.status !== 204) {
       logger.error('Failed to delete user role in Auth0', {
         auth0Id,
