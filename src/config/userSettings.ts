@@ -34,6 +34,24 @@ export const ALLOWED_USER_SETTINGS: Record<string, SettingDefinition> = {
     premiumOnly: false,
     description: 'Minimum accumulated amount to trigger round-up investment',
   },
+  roundup_categories: {
+    type: 'enum',
+    values: [
+      'ALL',
+      'FOOD',
+      'TRANSPORT',
+      'SHOPPING',
+      'ENTERTAINMENT',
+      'GROCERIES',
+      'HEALTH',
+      'UTILITIES',
+      'OTHER',
+    ],
+    default: 'ALL',
+    editable: true,
+    premiumOnly: false,
+    description: 'Categories of transactions for which round-ups are applied',
+  },
 
   // Auto-Invest
   auto_invest_enabled: {

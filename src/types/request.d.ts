@@ -5,6 +5,6 @@ export interface SessionRequest extends Request {
   session?: {
     userId: string;
     accessToken: string;
-    accessExp: string;
+    accessExp: number;
   };
 }

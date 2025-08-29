@@ -1,9 +1,13 @@
 import express from 'express';
 import { claimIncludes } from 'express-oauth2-jwt-bearer';
-import { checkJwt } from '../middleware/auth';
-import { getUserStatusController, getProfileController, updateProfileController } from '../controllers/profileController';
-import { sessionHandler } from '../middleware/sessionManager';
-import { refreshToken } from '../middleware/refreshToken';
+import { checkJwt } from '../middleware/authMiddleware';
+import {
+  getUserStatusController,
+  getProfileController,
+  updateProfileController,
+} from '../controllers/profileController';
+import { sessionHandler } from '../middleware/sessionManagerMiddleware';
+import { refreshToken } from '../middleware/refreshTokenMiddleware';
 
 const profileRouter = express.Router();
 

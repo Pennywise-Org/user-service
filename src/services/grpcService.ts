@@ -10,11 +10,15 @@ import {
 import { getUserSettingsPrisma, updateUserPlanPrisma } from '../services/prismaUserService';
 import { getLogger } from '../config/logger';
 import { getManagementAPIToken } from './authService';
-import { getManagementAPITokenRedis, getUserSessionRedis } from './redisService';
+import { getManagementAPITokenRedis } from './redisService';
 import { deleteUserRole, fetchUserRoleService, updateUserRole } from './managementService';
 import { PLAN_MAPPING } from '../config/planMapping';
 import { verifyGrpcAuthToken } from '../grpc/grpcAuth';
 import { decodeAccessToken } from './tokenService';
+import { getValidSessionOrRevoke } from '../lib/session/sessionHandler';
+import { sessionStatus } from '../types/userSession';
+import { maybeRefreshAccessToken } from '../lib/session/refreshAccessToken';
+import { StatusCode } from '../grpc/user';
 
 const logger = getLogger('grpc-service');
 
@@ -59,7 +63,7 @@ export const updateUserPlanService = async (
     return callback(null, {
       success: false,
       error_message: 'Missing user identifier',
-      code: 400,
+      code: StatusCode.BAD_REQUEST,
     });
   }
 
@@ -89,7 +93,7 @@ export const updateUserPlanService = async (
 
       return callback(null, {
         success: true,
-        code: 200,
+        code: StatusCode.OK_UNSPECIFIED,
       });
     }
     await deleteUserRole(managementAccessToken, auth0_id, currentRole);
@@ -103,7 +107,7 @@ export const updateUserPlanService = async (
 
     return callback(null, {
       success: true,
-      code: 200,
+      code: StatusCode.OK_UNSPECIFIED,
     });
   } catch (err) {
     logger.error('Unexpected error during UpdateUserPlan', {
@@ -115,7 +119,7 @@ export const updateUserPlanService = async (
     return callback(null, {
       success: false,
       error_message: err instanceof Error ? err.message : String(err),
-      code: 500,
+      code: StatusCode.SERVER_ERROR,
     });
   }
 };
@@ -155,8 +159,26 @@ export const getUserDetailsService = async (
 
   // Step 2: Try to fetch and decode user session info
   try {
-    const { sessionData } = await getUserSessionRedis(session_id);
-    const { accessToken, userId } = sessionData;
+    const { success, code, sessionData } = await getValidSessionOrRevoke(session_id);
+    if (!success) {
+      if (code === sessionStatus.NotFound) {
+        return callback(null, {
+          success: false,
+          permissions: [],
+          error_message: 'Session Data not found in Redis',
+          code: StatusCode.SESSION_NOT_FOUND,
+        });
+      } else if (code === sessionStatus.Expired) {
+        return callback(null, {
+          success: false,
+          permissions: [],
+          error_message: 'Session expired due to inactivity',
+          code: StatusCode.SESSION_EXPIRED,
+        });
+      }
+    }
+    const { userId } = sessionData!;
+    const { refreshed, accessToken } = await maybeRefreshAccessToken(session_id, sessionData!);
 
     const decodedAccessToken = await decodeAccessToken(accessToken);
     const role = decodedAccessToken?.['https://pennywise.app/role'];
@@ -168,13 +190,23 @@ export const getUserDetailsService = async (
       role,
     });
 
-    return callback(null, {
-      success: true,
-      auth0_id: userId,
-      role,
-      permissions,
-      code: 200,
-    });
+    if (refreshed) {
+      return callback(null, {
+        success: true,
+        auth0_id: userId,
+        role,
+        permissions,
+        code: StatusCode.REFRESHED,
+      });
+    } else {
+      return callback(null, {
+        success: true,
+        auth0_id: userId,
+        role,
+        permissions,
+        code: StatusCode.OK_UNSPECIFIED,
+      });
+    }
   } catch (err) {
     logger.error('Failed to fetch user details from session ID', {
       session_id,
@@ -185,7 +217,7 @@ export const getUserDetailsService = async (
       success: false,
       permissions: [],
       error_message: err instanceof Error ? err.message : String(err),
-      code: 500,
+      code: StatusCode.SERVER_ERROR,
     });
   }
 };
@@ -243,7 +275,7 @@ export const getUserSettingsService = async (
     return callback(null, {
       success: true,
       settings: formattedSettings,
-      code: 200,
+      code: StatusCode.OK_UNSPECIFIED,
     });
   } catch (err) {
     logger.error('Error fetching user settings from DB', {
@@ -255,7 +287,7 @@ export const getUserSettingsService = async (
       success: false,
       settings: {},
       error_message: err instanceof Error ? err.message : String(err),
-      code: 500,
+      code: StatusCode.SERVER_ERROR,
     });
   }
 };

@@ -1,5 +1,11 @@
 export interface sessionData {
-  accessToken: string;
   userId: string;
-  acessExp: number;
+  accessToken: string;
+  accessExp: number;
+}
+
+export enum sessionStatus {
+  NotFound = 1,
+  Expired = 2,
+  Valid = 3,
 }
